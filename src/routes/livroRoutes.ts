@@ -1,26 +1,20 @@
 import type { FastifyInstance } from "fastify";
+import {
+  listarLivros,
+  buscarLivroId,
+  cadastrarLivro,
+  atualizarLivro,
+  deletarLivro,
+} from "../controllers/livroController.js";
 
 export default function routes(app: FastifyInstance) {
-  app.get("/livros", async (request, reply) => {
-    reply.send({ message: "Listar todos os livros" });
-  });
+  app.get("/livros", listarLivros);
 
-  app.get("/livros/:id", async (request, reply) => {
-    const { id } = request.params as { id: string };
-    reply.send({ message: `Buscar livro: ${id}` });
-  });
+  app.get("/livros/:id", buscarLivroId);
 
-  app.post("/livros", async (request, reply) => {
-    reply.status(201).send({ message: "Livro criado!" });
-  });
+  app.post("/livros", cadastrarLivro);
 
-  app.put("/livros/:id", async (request, reply) => {
-    const { id } = request.params as { id: string };
-    reply.send({ message: `Atualizar livro: ${id}` });
-  });
+  app.put("/livros/:id", atualizarLivro);
 
-  app.delete("/livros/:id", async (request, reply) => {
-    const { id } = request.params as { id: string };
-    reply.send({ message: `Deletar livro: ${id}` });
-  });
+  app.delete("/livros/:id", deletarLivro);
 }
