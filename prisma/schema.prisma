@@ -14,7 +14,15 @@ datasource db {
 
 model Livro {
   id String @id @default(uuid(7))
-  titulo String
-  autor String
-  createdAt DateTime @default(now())
+  titulo String 
+  descricao String?
+  autor String 
+  avaliacao Float?
+  preco Decimal?
+  ano_de_publicacao Int?
+  marca String?
+  isbn String? @unique
+  foto_path String? @unique
+  data_criacao DateTime @default(now())
+  data_atualizacao DateTime @updatedAt
 }
