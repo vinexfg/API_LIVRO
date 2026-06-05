@@ -1,4 +1,5 @@
 import type { FastifyRequest, FastifyReply, FastifyInstance } from "fastify";
+import { buscarLivros } from "../services/livroServices.js";
 
 interface Livro {
   titulo: string;
