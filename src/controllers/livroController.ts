@@ -7,7 +7,7 @@ import {
   apagarLivro,
 } from "../services/livroServices.js";
 
-interface Livro {
+export interface Livro {
   titulo: string;
   descricao?: string;
   autor: string;
@@ -41,7 +41,7 @@ export async function cadastrarLivro(
   reply: FastifyReply,
 ) {
   const livro = request.body;
-  const resultado = await criarLivro(livro.titulo, livro.autor);
+  const resultado = await criarLivro(livro);
 
   return reply
     .status(201)
@@ -54,7 +54,7 @@ export async function atualizarLivro(
 ) {
   const { id } = request.params as { id: string };
   const livro = request.body;
-  const resultado = await atualizarLivroPorId(id, livro.titulo, livro.autor);
+  const resultado = await atualizarLivroPorId(id, livro);
   return reply
     .status(200)
     .send({ message: "Livro atualizado com sucesso!" + resultado });
