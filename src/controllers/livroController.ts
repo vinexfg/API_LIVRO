@@ -23,53 +23,82 @@ export async function listarLivros(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const livros = await buscarLivros();
-  return reply.status(200).send(livros);
+  try {
+    const resultado = await buscarLivros();
+    return reply.status(200).send(resultado);
+  } catch (error) {
+    return reply.status(500).send({ message: "Erro ao buscar livros." });
+  }
 }
 
 export async function buscarLivroId(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const { id } = request.params as { id: string };
-  const livro = await buscarLivroPorId(id);
-  return reply.status(200).send(livro);
+  try {
+    const { id } = request.params as { id: string };
+    const resultado = await buscarLivroPorId(id);
+    if (!resultado) {
+      return reply
+        .status(404)
+        .send({ message: "Livro com id não encontrado." });
+    }
+    return reply.status(200).send(resultado);
+  } catch (error) {
+    return reply.status(500).send({ message: "Erro ao buscar livro." });
+  }
 }
 
 export async function cadastrarLivro(
   request: FastifyRequest<{ Body: Livro }>,
   reply: FastifyReply,
 ) {
-  const livro = request.body;
-  const resultado = await criarLivro(livro);
-
-  return reply
-    .status(201)
-    .send({ message: "Livro cadastrado com sucesso! " + resultado });
+  try {
+    const livro = request.body;
+    const resultado = await criarLivro(livro);
+    return reply.status(201).send(resultado);
+  } catch (error) {
+    return reply.status(500).send({ message: "Erro ao cadastrar livro." });
+  }
 }
 
 export async function atualizarLivro(
   request: FastifyRequest<{ Body: Livro }>,
   reply: FastifyReply,
 ) {
-  const { id } = request.params as { id: string };
-  const livro = request.body;
-  const resultado = await atualizarLivroPorId(id, livro);
-  return reply
-    .status(200)
-    .send({ message: "Livro atualizado com sucesso!" + resultado });
+  try {
+    const { id } = request.params as { id: string };
+    const livro = request.body;
+    const verificarId = await buscarLivroPorId(id);
+    if (!verificarId) {
+      return reply
+        .status(404)
+        .send({ message: "Livro com id não encontrado para atualizar." });
+    }
+    const resultado = await atualizarLivroPorId(id, livro);
+    return reply.status(200).send(resultado);
+  } catch (error) {
+    return reply.status(500).send({ message: "Erro ao atualizar livro." });
+  }
 }
 
 export async function deletarLivro(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const { id } = request.params as { id: string };
-  const resultado = await apagarLivro(id);
-
-  return reply
-    .status(200)
-    .send({ message: "Livro deletado com sucesso!" + resultado });
+  try {
+    const { id } = request.params as { id: string };
+    const verificarId = await buscarLivroPorId(id);
+    if (!verificarId) {
+      return reply
+        .status(404)
+        .send({ message: "Livro com id não encontrado para deletar." });
+    }
+    const resultado = await apagarLivro(id);
+    return reply.status(200).send(resultado);
+  } catch (error) {
+    return reply.status(500).send({ message: "Erro ao deletar livro." });
+  }
 }
 
 //  CODIGO USADO DE BASE PARA TESTAR OS CONTROLLERS E ROTAS
