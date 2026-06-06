@@ -10,6 +10,8 @@ import {
 export default function routes(app: FastifyInstance) {
   app.get("/livros", listarLivros);
 
+  app.get("/livros/:id", buscarLivroId);
+
   app.post("/livros", cadastrarLivro);
 
   app.put("/livros/:id", atualizarLivro);

@@ -1,73 +1,169 @@
-import type { FastifyRequest, FastifyReply, FastifyInstance } from "fastify";
+import type { FastifyRequest, FastifyReply } from "fastify";
+import {
+  buscarLivros,
+  buscarLivroPorId,
+  criarLivro,
+  atualizarLivroPorId,
+  apagarLivro,
+} from "../services/livroServices.js";
 
-interface Livro {
+export interface Livro {
   titulo: string;
-  descricao: string;
+  descricao?: string;
   autor: string;
-  // avaliacao: number;
-  // preco: number;
-  // ano_de_publicacao: number;
-  // marca: string;
-  // isbn: number;
-  // foto_path: string;
+  avaliacao?: number;
+  preco?: number;
+  ano_de_publicacao?: number;
+  marca?: string;
+  isbn?: string;
+  foto_path?: string;
 }
-
-const livros_db_teste: Livro[] = [
-  {
-    titulo: "Livro 01",
-    descricao: "Descrição 01",
-    autor: "Autor 01",
-  },
-  {
-    titulo: "Livro 02",
-    descricao: "Descrição 02",
-    autor: "Autor 02",
-  },
-];
 
 export async function listarLivros(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  return reply.send(livros_db_teste);
+  try {
+    const resultado = await buscarLivros();
+    return reply.status(200).send(resultado);
+  } catch (error) {
+    return reply.status(500).send({ message: "Erro ao buscar livros." });
+  }
 }
 
 export async function buscarLivroId(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const { id } = request.params as { id: string };
-
-  return reply.send(livros_db_teste[Number(id)]);
+  try {
+    const { id } = request.params as { id: string };
+    const resultado = await buscarLivroPorId(id);
+    if (!resultado) {
+      return reply
+        .status(404)
+        .send({ message: "Livro com id não encontrado." });
+    }
+    return reply.status(200).send(resultado);
+  } catch (error) {
+    return reply.status(500).send({ message: "Erro ao buscar livro." });
+  }
 }
 
 export async function cadastrarLivro(
   request: FastifyRequest<{ Body: Livro }>,
   reply: FastifyReply,
 ) {
-  const livro = request.body;
-  livros_db_teste.push(livro);
-
-  return reply.status(201).send({ message: "Livro cadastrado com sucesso!" });
+  try {
+    const livro = request.body;
+    const resultado = await criarLivro(livro);
+    return reply.status(201).send(resultado);
+  } catch (error) {
+    return reply.status(500).send({ message: "Erro ao cadastrar livro." });
+  }
 }
 
 export async function atualizarLivro(
   request: FastifyRequest<{ Body: Livro }>,
   reply: FastifyReply,
 ) {
-  const { id } = request.params as { id: string };
-  const livro_atualizado = request.body;
-  livros_db_teste[Number(id)] = livro_atualizado;
-
-  return reply.status(200).send({ message: "Livro atualizado com sucesso!" });
+  try {
+    const { id } = request.params as { id: string };
+    const livro = request.body;
+    const verificarId = await buscarLivroPorId(id);
+    if (!verificarId) {
+      return reply
+        .status(404)
+        .send({ message: "Livro com id não encontrado para atualizar." });
+    }
+    const resultado = await atualizarLivroPorId(id, livro);
+    return reply.status(200).send(resultado);
+  } catch (error) {
+    return reply.status(500).send({ message: "Erro ao atualizar livro." });
+  }
 }
 
 export async function deletarLivro(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const { id } = request.params as { id: string };
-  livros_db_teste.splice(Number(id), 1);
-
-  return reply.status(200).send({ message: "Livro deletado com sucesso!" });
+  try {
+    const { id } = request.params as { id: string };
+    const verificarId = await buscarLivroPorId(id);
+    if (!verificarId) {
+      return reply
+        .status(404)
+        .send({ message: "Livro com id não encontrado para deletar." });
+    }
+    const resultado = await apagarLivro(id);
+    return reply.status(200).send(resultado);
+  } catch (error) {
+    return reply.status(500).send({ message: "Erro ao deletar livro." });
+  }
 }
+
+//  CODIGO USADO DE BASE PARA TESTAR OS CONTROLLERS E ROTAS
+
+// const livros_db_teste: Livro[] = [
+//   {
+//     titulo: "Livro 01",
+//     descricao: "Descrição 01",
+//     autor: "Autor 01",
+//   },
+//   {
+//     titulo: "Livro 02",
+//     descricao: "Descrição 02",
+//     autor: "Autor 02",
+//   },
+// ];
+
+// LISTAR LIVROS DE TESTE - SEM PRISMA
+// export async function listarLivros(
+//   request: FastifyRequest,
+//   reply: FastifyReply,
+// ) {
+//   return reply.status(200).send(livros_db_teste);
+// }
+
+// BUSCAR LIVRO POR ID DE TESTE - SEM PRISMA
+// export async function buscarLivroId(
+//   request: FastifyRequest,
+//   reply: FastifyReply,
+// ) {
+//   const { id } = request.params as { id: string };
+
+//   return reply.status(200).send(livros_db_teste[Number(id)]);
+// }
+
+// CADASTRAR LIVRO TESTE - SEM PRISMA
+// export async function cadastrarLivro(
+//   request: FastifyRequest<{ Body: Livro }>,
+//   reply: FastifyReply,
+// ) {
+//   const livro = request.body;
+//   livros_db_teste.push(livro);
+
+//   return reply.status(201).send({ message: "Livro cadastrado com sucesso!" });
+// }
+
+// ATUALIZAR LIVRO TESTE - SEM PRISMA
+// export async function atualizarLivro(
+//   request: FastifyRequest<{ Body: Livro }>,
+//   reply: FastifyReply,
+// ) {
+//   const { id } = request.params as { id: string };
+//   const livro_atualizado = request.body;
+//   livros_db_teste[Number(id)] = livro_atualizado;
+
+//   return reply.status(200).send({ message: "Livro atualizado com sucesso!" });
+// }
+
+// DELETAR LIVRO TESTE - SEM PRISMA
+// export async function deletarLivro(
+//   request: FastifyRequest,
+//   reply: FastifyReply,
+// ) {
+//   const { id } = request.params as { id: string };
+//   livros_db_teste.splice(Number(id), 1);
+
+//   return reply.status(200).send({ message: "Livro deletado com sucesso!" });
+// }
