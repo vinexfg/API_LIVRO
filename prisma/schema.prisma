@@ -16,6 +16,7 @@ datasource db {
 model Livro {
   id String @id @default(uuid(7))
   titulo String
+  description String
   autor String
   createdAt DateTime @default(now())
 }
