@@ -15,6 +15,20 @@ datasource db {
 model Livro {
   id String @id @default(uuid(7))
   titulo String
-  autor String
+  autorId String
+  autor Autor @relation(fields: [autorId], references: [id])
+  descricao String
+  avaliacao Float
+  preco Float
+  ano_de_publicacao Int
+  isbn String
+  foto_path String
   createdAt DateTime @default(now())
+}
+
+model Autor{
+  id String @id @default(uuid(7))
+  nome String
+  createdAt DateTime @default(now())
+  livros Livro[]
 }
