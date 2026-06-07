@@ -17,7 +17,7 @@ export async function criarLivro(livro: Livro) {
   return prisma.livro.create({
     data: {
       titulo: livro.titulo,
-      autor: livro.autor,
+      autorId: livro.autorId,
       descricao: livro.descricao ?? null,
       avaliacao: livro.avaliacao ?? null,
       preco: livro.preco ?? null,
@@ -36,7 +36,7 @@ export async function atualizarLivroPorId(id: string, livro: Livro) {
     },
     data: {
       titulo: livro.titulo,
-      autor: livro.autor,
+      autorId: livro.autorId,
       descricao: livro.descricao ?? null,
       avaliacao: livro.avaliacao ?? null,
       preco: livro.preco ?? null,

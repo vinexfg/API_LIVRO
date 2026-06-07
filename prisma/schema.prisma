@@ -17,18 +17,21 @@ model Livro {
   titulo String
   autorId String
   autor Autor @relation(fields: [autorId], references: [id])
-  descricao String
-  avaliacao Float
-  preco Float
-  ano_de_publicacao Int
-  isbn String
-  foto_path String
-  createdAt DateTime @default(now())
+  descricao String?
+  avaliacao Float?
+  preco Float?
+  ano_de_publicacao Int?
+  marca String?
+  isbn String?
+  foto_path String?
+  criadoEm DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
 }
 
-model Autor{
+model Autor {
   id String @id @default(uuid(7))
   nome String
-  createdAt DateTime @default(now())
+  criadoEm DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
   livros Livro[]
 }

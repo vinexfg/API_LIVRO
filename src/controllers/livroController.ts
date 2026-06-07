@@ -9,8 +9,8 @@ import {
 
 export interface Livro {
   titulo: string;
+  autorId: string;
   descricao?: string;
-  autor: string;
   avaliacao?: number;
   preco?: number;
   ano_de_publicacao?: number;

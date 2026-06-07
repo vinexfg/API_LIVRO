@@ -5,8 +5,11 @@ import {
   criarAutor,
   atualizarAutorPorId,
   apagarAutor,
-  type Autor,
 } from "../services/autorServices.js";
+
+export interface Autor {
+  nome: string;
+}
 
 type ParamsId = { Params: { id: string } };
 
@@ -19,7 +22,7 @@ export async function listarAutores(
     return reply.status(200).send(resultado);
   } catch (error) {
     console.error(error);
-    return reply.status(500).send({ message: "erro ao buscar autores" });
+    return reply.status(500).send({ message: "Erro ao buscar autores." });
   }
 }
 
@@ -31,16 +34,18 @@ export async function buscarAutorId(
     const { id } = request.params;
     const resultado = await buscarAutorPorId(id);
     if (!resultado) {
-      reply.status(404).send({ message: "nao existe autor com essa id" });
+      return reply
+        .status(404)
+        .send({ message: "Autor com id não encontrado." });
     }
     return reply.status(200).send(resultado);
   } catch (error) {
     console.error(error);
-    reply.status(500).send({ message: "Error ao buscar os autores" });
+    return reply.status(500).send({ message: "Erro ao buscar autor." });
   }
 }
 
-export async function CadastrarAutor(
+export async function cadastrarAutor(
   request: FastifyRequest<{ Body: Autor }>,
   reply: FastifyReply,
 ) {
@@ -50,9 +55,7 @@ export async function CadastrarAutor(
     return reply.status(201).send(resultado);
   } catch (error) {
     console.error(error);
-    return reply
-      .status(500)
-      .send({ message: "erro interno ao cadastrar autor" });
+    return reply.status(500).send({ message: "Erro ao cadastrar autor." });
   }
 }
 
@@ -65,13 +68,15 @@ export async function atualizarAutor(
     const autor = request.body;
     const verificarId = await buscarAutorPorId(id);
     if (!verificarId) {
-      return reply.status(404).send({ message: "autor com id nao encontrado" });
+      return reply
+        .status(404)
+        .send({ message: "Autor com id não encontrado para atualizar." });
     }
     const resultado = await atualizarAutorPorId(id, autor);
-    reply.status(200).send(resultado);
+    return reply.status(200).send(resultado);
   } catch (error) {
     console.error(error);
-    reply.status(500).send({ message: "error interno ao editar o autor" });
+    return reply.status(500).send({ message: "Erro ao atualizar autor." });
   }
 }
 
@@ -81,14 +86,16 @@ export async function deletarAutor(
 ) {
   try {
     const { id } = request.params;
-    const verficarId = await buscarAutorPorId(id);
-    if (!verficarId) {
-      reply.status(404).send({ message: "erro ao deletar autor" });
+    const verificarId = await buscarAutorPorId(id);
+    if (!verificarId) {
+      return reply
+        .status(404)
+        .send({ message: "Autor com id não encontrado para deletar." });
     }
     const resultado = await apagarAutor(id);
     return reply.status(200).send(resultado);
   } catch (error) {
     console.error(error);
-    reply.status(500).send({ message: "erro ao deletar o autor" });
+    return reply.status(500).send({ message: "Erro ao deletar autor." });
   }
 }

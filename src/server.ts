@@ -1,16 +1,19 @@
+import "dotenv/config";
 import Fastify from "fastify";
-import routes from "./routes/livroRoutes.js";
+import livroRoutes from "./routes/livroRoutes.js";
+import autorRoutes from "./routes/autorRoutes.js";
 
 const app = Fastify({
   logger: true,
 });
 
-app.register(routes);
+app.register(autorRoutes);
+app.register(livroRoutes);
 
 async function start() {
   try {
     await app.listen({
-      port: 3000,
+      port: Number(process.env.PORT),
       host: "0.0.0.0",
     });
   } catch (error) {

@@ -7,7 +7,7 @@ import {
   deletarLivro,
 } from "../controllers/livroController.js";
 
-export default function routes(app: FastifyInstance) {
+export default function livroRoutes(app: FastifyInstance) {
   app.get("/livros", listarLivros);
 
   app.get("/livros/:id", buscarLivroId);
