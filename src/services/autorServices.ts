@@ -1,5 +1,5 @@
 import prisma from "../prisma.js";
-import type { Autor } from "../controllers/autorController.js";
+import type { Autor } from "../types/autor.js";
 
 export async function buscarAutores() {
   return prisma.autor.findMany();

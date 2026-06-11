@@ -7,9 +7,7 @@ import {
   apagarAutor,
 } from "../services/autorServices.js";
 
-export interface Autor {
-  nome: string;
-}
+import type { Autor } from "../types/autor.js";
 
 type ParamsId = { Params: { id: string } };
 
