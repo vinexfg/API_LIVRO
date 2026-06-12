@@ -22,10 +22,10 @@ export class LivroRepository {
         descricao: livro.descricao ?? null,
         avaliacao: livro.avaliacao ?? null,
         preco: livro.preco ?? null,
-        ano_de_publicacao: livro.ano_de_publicacao ?? null,
+        anoDePublicacao: livro.anoDePublicacao ?? null,
         marca: livro.marca ?? null,
         isbn: livro.isbn ?? null,
-        foto_path: livro.foto_path ?? null,
+        fotoPath: livro.fotoPath ?? null,
       },
     });
   }
@@ -41,10 +41,10 @@ export class LivroRepository {
         descricao: livro.descricao ?? null,
         avaliacao: livro.avaliacao ?? null,
         preco: livro.preco ?? null,
-        ano_de_publicacao: livro.ano_de_publicacao ?? null,
+        anoDePublicacao: livro.anoDePublicacao ?? null,
         marca: livro.marca ?? null,
         isbn: livro.isbn ?? null,
-        foto_path: livro.foto_path ?? null,
+        fotoPath: livro.fotoPath ?? null,
       },
     });
   }

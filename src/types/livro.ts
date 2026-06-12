@@ -4,8 +4,8 @@ export interface Livro {
   descricao?: string;
   avaliacao?: number;
   preco?: number;
-  ano_de_publicacao?: number;
+  anoDePublicacao?: number;
   marca?: string;
   isbn?: string;
-  foto_path?: string;
+  fotoPath?: string;
 }

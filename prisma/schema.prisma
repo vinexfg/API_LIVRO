@@ -20,10 +20,10 @@ model Livro {
   descricao String?
   avaliacao Float?
   preco Float?
-  ano_de_publicacao Int?
+  anoDePublicacao Int?
   marca String?
   isbn String?
-  foto_path String?
+  fotoPath String?
   criadoEm DateTime @default(now())
   atualizadoEm DateTime @updatedAt
 }
